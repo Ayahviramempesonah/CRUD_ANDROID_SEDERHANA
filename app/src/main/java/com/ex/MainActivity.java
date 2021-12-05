@@ -6,8 +6,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.*;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -72,11 +71,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
+        void ubahFile(){
+
+        String ubah="update isi data file text";
 
 
 
+        File file=new File(getFilesDir(),FILENAME);
+        FileOutputStream fileOutputStream=null;
+
+        try{
+            file.createNewFile();
+            fileOutputStream = new FileOutputStream(file,false);
+            fileOutputStream.write(ubah.getBytes());
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
 
+
+        }
+
+        void bacaFile(){
+        File sdCard=getFilesDir();
+        File file=new File(sdCard,FILENAME);
+
+        if(file.exists());{
+
+            StringBuilder stringBuilder=new StringBuilder();
+
+            try{
+                BufferedReader bufferedReader= new BufferedReader(new FileReader(file));
+
+                String line= bufferedReader.readLine();
+
+                    while (line != null){
+                        textView.append(line);
+                        line=bufferedReader.readLine();
+                    }
+
+                    bufferedReader.close();
+
+            } catch (IOException e){
+                System.out.println("Error"+ e.getMessage());
+            }
+            textView.setText(textView.toString());
+            }
+
+        }
+
+            void setHapusFile(){
+            File file=new File(getFilesDir(),FILENAME);
+
+            if(file.exists()){
+                file.delete();
+            }
+
+
+            }
 
 
 
@@ -94,5 +148,40 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
+
+        jalankanPerintah(v.getId());
+
+
+
+
+
     }
+
+
+    void jalankanPerintah(int id){
+
+        switch (id){
+
+
+            case R.id.btn_create:
+                bacaFile();
+                break;
+            case R.id.btn_baca:
+                bacaFile();
+                break;
+            case R.id.btn_ubah:
+                ubahFile();
+                break;
+            case R.id.btn_hapus:
+                setHapusFile();
+                break;
+        }
+
+
+    }
+
+
+
+
+
 }
